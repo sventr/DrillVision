@@ -4,9 +4,12 @@ enum class SystemState
 {
     Startup,
     Normal,
-    Calibrating,
     InLevel,
     Warning,
     Alarm,
+    Calibrating,
     Menu
 };
+
+SystemState system_state_from_angles(float xAngle, float yAngle);
+const char* system_state_to_text(SystemState state);

@@ -2,22 +2,22 @@
 
 #include "display_manager.h"
 #include "config.h"
+#include "system_state.h"
 
 void display_init()
 {
-    Serial.println("=================================");
     Serial.println("Display Manager gestartet");
     Serial.println("Display Hardware noch nicht aktiv");
-    Serial.println("=================================");
 }
 
-void display_update(float xAngle, float yAngle)
+void display_update(float xAngle, float yAngle, SystemState state)
 {
     Serial.printf(
-        "[DISPLAY] %s %s | X: %.2f° | Y: %.2f°\n",
+        "[DISPLAY] %s %s | X: %.2f° | Y: %.2f° | STATUS: %s\n",
         PROJECT_NAME,
         PROJECT_VERSION,
         xAngle,
-        yAngle
+        yAngle,
+        system_state_to_text(state)
     );
 }

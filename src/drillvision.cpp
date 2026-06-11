@@ -4,6 +4,7 @@
 #include "config.h"
 #include "sensor.h"
 #include "display_manager.h"
+#include "system_state.h"
 
 DrillVisionApp DrillVision;
 
@@ -24,8 +25,10 @@ void DrillVisionApp::update()
 {
     sensor_update();
 
-    display_update(
-        sensor_get_x(),
-        sensor_get_y()
-    );
+    float x = sensor_get_x();
+    float y = sensor_get_y();
+
+    SystemState state = system_state_from_angles(x, y);
+
+    display_update(x, y, state);
 }

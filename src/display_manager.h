@@ -1,4 +1,6 @@
 #pragma once
 
+#include "system_state.h"
+
 void display_init();
-void display_update(float xAngle, float yAngle);
+void display_update(float xAngle, float yAngle, SystemState state);
