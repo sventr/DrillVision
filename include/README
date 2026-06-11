@@ -1,4 +1,4 @@
-als text
+
 🔩 DrillVision V4.01
 
 Digitale Präzisions-Bohrhilfe zur exakten Ausrichtung von Bohrmaschinen für horizontales und vertikales Bohren.
@@ -28,21 +28,31 @@ Energieversorgung
 LiPo Akku
 ca. 1000 mAh
 USB-C Ladefunktion
+
+
 Gehäuse
 CNC gedrehtes Aluminiumgehäuse
+
 Dreiteiliges Design
 M3 Verschraubung
 Seitlicher USB-C Ladeanschluss
+
+
 Hauptfunktionen
 Horizontales Bohren
 Vertikales Bohren
 Winkelanzeige X-Achse
 Winkelanzeige Y-Achse
 Kalibrierung
+
 Akkuüberwachung
+
 WLAN Status
+
 USB Status
+
 Temperaturanzeige
+
 Benutzeroberfläche
 Hauptanzeige
 Zentrales Fadenkreuz
@@ -52,12 +62,16 @@ Y-Winkel
 Akkuanzeige
 WLAN Anzeige
 USB Anzeige
+
 Kalibrierstatus
 Farblogik
 Bereich	Farbe	Status
 0.0° - 0.3°	Grün	Im Lot
 0.3° - 1.0°	Gelb	Korrigieren
 > 1.0°	Rot	Außer Lot
+
+
+
 Firmware Architektur
 main.cpp
     ↓
