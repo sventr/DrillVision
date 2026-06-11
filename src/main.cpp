@@ -1,16 +1,16 @@
 #include <Arduino.h>
-#include "ui_main.h"
+#include "drillvision.h"
 
 void setup()
 {
     Serial.begin(115200);
+    delay(1000);
 
-    ui_init();
+    DrillVision.begin();
 }
 
 void loop()
 {
-    ui_update_fake_values();
-
+    DrillVision.update();
     delay(100);
 }
