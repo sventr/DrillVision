@@ -1,37 +1,178 @@
+als text
+🔩 DrillVision V4.01
 
-This directory is intended for project header files.
+Digitale Präzisions-Bohrhilfe zur exakten Ausrichtung von Bohrmaschinen für horizontales und vertikales Bohren.
 
-A header file is a file containing C declarations and macro definitions
-to be shared between several project source files. You request the use of a
-header file in your project source file (C, C++, etc) located in `src` folder
-by including it, with the C preprocessing directive `#include'.
+Projektziel
 
-```src/main.c
+DrillVision unterstützt den Anwender beim präzisen Bohren durch eine hochauflösende Neigungsanzeige auf einem runden 480×480 Display.
 
-#include "header.h"
+Das System erfasst die Lage der Bohrmaschine über einen 6-Achsen-Sensor und visualisiert die Abweichung über ein zentrales Fadenkreuz sowie einen farbcodierten Präzisionsring.
 
-int main (void)
-{
- ...
-}
-```
+Geplante Hardware
+Controller
+ESP32-S3
+WLAN
+Bluetooth
+USB-C
+Display
+LILYGO T-RGB 2.8"
+480 × 480 Pixel
+Runddisplay
+Touch-Unterstützung
+Sensor
+Bosch BMI270
+3-Achsen Beschleunigungssensor
+3-Achsen Gyroskop
+Energieversorgung
+LiPo Akku
+ca. 1000 mAh
+USB-C Ladefunktion
+Gehäuse
+CNC gedrehtes Aluminiumgehäuse
+Dreiteiliges Design
+M3 Verschraubung
+Seitlicher USB-C Ladeanschluss
+Hauptfunktionen
+Horizontales Bohren
+Vertikales Bohren
+Winkelanzeige X-Achse
+Winkelanzeige Y-Achse
+Kalibrierung
+Akkuüberwachung
+WLAN Status
+USB Status
+Temperaturanzeige
+Benutzeroberfläche
+Hauptanzeige
+Zentrales Fadenkreuz
+Präzisionsring
+X-Winkel
+Y-Winkel
+Akkuanzeige
+WLAN Anzeige
+USB Anzeige
+Kalibrierstatus
+Farblogik
+Bereich	Farbe	Status
+0.0° - 0.3°	Grün	Im Lot
+0.3° - 1.0°	Gelb	Korrigieren
+> 1.0°	Rot	Außer Lot
+Firmware Architektur
+main.cpp
+    ↓
+DrillVisionApp
+    ↓
+SensorManager
+    ↓
+AngleMath
 
-Including a header file produces the same results as copying the header file
-into each source file that needs it. Such copying would be time-consuming
-and error-prone. With a header file, the related declarations appear
-in only one place. If they need to be changed, they can be changed in one
-place, and programs that include the header file will automatically use the
-new version when next recompiled. The header file eliminates the labor of
-finding and changing all the copies as well as the risk that a failure to
-find one copy will result in inconsistencies within a program.
+    ↓
 
-In C, the convention is to give header files names that end with `.h'.
+DisplayManager
+    ↓
+LVGL
+    ↓
+LovyanGFX
+Projektstatus
+V4.01
+ GitHub Repository eingerichtet
+ Firmware Grundstruktur erstellt
+ Sensor Abstraktion erstellt
+ Winkelberechnung implementiert
+ Display Manager vorbereitet
+ UI Spezifikation erstellt
+ Git Workflow eingerichtet
+Nächste Schritte
+Firmware
+ SystemState Manager
+ Calibration Manager
+ Battery Manager
+ Display Manager erweitern
+Hardware Integration
+ BMI270 anbinden
+ LILYGO Display integrieren
+ Touchscreen aktivieren
+ USB Ladezustand anzeigen
+Benutzeroberfläche
+ LVGL Integration
+ Fadenkreuzanzeige
+ Außenring mit Farblogik
+ Kalibrierungsmenü
+ OTA Einstellungen
+Mechanischer Aufbau
+Gehäuse
+Gedrehtes Aluminiumgehäuse
+Dreiteilig
+Oberteil
+Mittelteil
+Unterteil
+Befestigung
+M3 Verschraubung
+Innenliegender Akku
+BMI270 Sensor auf separater Platine
+Anschlüsse
+USB-C Ladeanschluss seitlich
+Zugriff ohne Gehäuseöffnung
+Anzeigezustände
+Startup
+Logo
+Versionsnummer
+Selbsttest
+Normalbetrieb
+X/Y Winkel
+Statusanzeigen
+Präzisionsring
+Im Lot
+Ring Grün
+Status "IM LOT"
+Korrigieren
+Ring Gelb
+Status "KORRIGIEREN"
+Außer Lot
+Ring Rot
+Status "AUSSER LOT"
+Kalibrierung
+Sensor nullen
+Offset speichern
+Verwendete Software
+Visual Studio Code
+PlatformIO
+Arduino Framework
+LVGL
+LovyanGFX
+SparkFun BMI270 Library
+ArduinoJson
+Version
 
-Read more about using header files in official GCC documentation:
+Aktuelle Entwicklung:
 
-* Include Syntax
-* Include Operation
-* Once-Only Headers
-* Computed Includes
+DrillVision V4.01
 
-https://gcc.gnu.org/onlinedocs/cpp/Header-Files.html
+Branch:
+
+feature/drillvision-core
+
+Roadmap
+V4.02
+SystemState Manager
+Calibration Manager
+Battery Manager
+V4.03
+BMI270 Integration
+Kalibrierung
+Sensorfilter
+V4.04
+Displaytreiber
+LovyanGFX
+V4.05
+LVGL Oberfläche
+Fadenkreuz
+Statusanzeigen
+V5.00
+Fertiger Prototyp
+Vollständige Hardwareintegration
+Gehäusefertigung
+Feldtest beim Bohren
+
+DrillVision – Präzise Bohren mit digitaler Ausrichtung. 🔩📐
