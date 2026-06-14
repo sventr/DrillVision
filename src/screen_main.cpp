@@ -7,6 +7,7 @@
 #include "system_state.h"
 #include "config.h"
 
+
 static lv_obj_t* labelTitle = nullptr;
 static lv_obj_t* labelVersion = nullptr;
 static lv_obj_t* labelStatusBar = nullptr;
@@ -201,16 +202,48 @@ void screen_main_update()
 
     lv_label_set_text(labelStatus, system_state_to_text(g_uiData.state));
     lv_obj_set_style_text_color(labelStatus, get_state_color(g_uiData.state), 0);
-    lv_color_t ringColor =
+   float deviation =
+    fmax(
+        fabs(g_uiData.xAngle),
+        fabs(g_uiData.yAngle)
+    );
+
+lv_color_t ringColor =
     get_state_color(g_uiData.state);
+
+int activeDots =
+    (int)(deviation * 24.0f);
+
+if (activeDots < 1)
+{
+    activeDots = 1;
+}
+
+if (activeDots > 72)
+{
+    activeDots = 72;
+}
 
 for (int i = 0; i < 72; i++)
 {
-    if (outerDots[i])
+    if (!outerDots[i])
+    {
+        continue;
+    }
+
+    if (i < activeDots)
     {
         lv_obj_set_style_bg_color(
             outerDots[i],
             ringColor,
+            0
+        );
+    }
+    else
+    {
+        lv_obj_set_style_bg_color(
+            outerDots[i],
+            lv_color_hex(0x333333),
             0
         );
     }
