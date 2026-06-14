@@ -13,6 +13,20 @@ static lv_obj_t* labelX = nullptr;
 static lv_obj_t* labelY = nullptr;
 static lv_obj_t* labelStatus = nullptr;
 
+static lv_obj_t* lineHorizontal = nullptr;
+static lv_obj_t* lineVertical = nullptr;
+static lv_obj_t* centerCircle = nullptr;
+
+static lv_point_precise_t horizontalPoints[] = {
+    {115, 250},
+    {365, 250}
+};
+
+static lv_point_precise_t verticalPoints[] = {
+    {240, 160},
+    {240, 350}
+};
+
 static lv_color_t get_state_color(SystemState state)
 {
     switch (state)
@@ -49,6 +63,24 @@ void screen_main_create()
     lv_label_set_text(labelStatusBar, "WiFi:OFF  USB:ON  BAT:100%");
     lv_obj_set_style_text_color(labelStatusBar, lv_color_white(), 0);
     lv_obj_align(labelStatusBar, LV_ALIGN_TOP_MID, 0, 110);
+
+    lineHorizontal = lv_line_create(screen);
+    lv_line_set_points(lineHorizontal, horizontalPoints, 2);
+    lv_obj_set_style_line_color(lineHorizontal, lv_color_hex(0x00FF66), 0);
+    lv_obj_set_style_line_width(lineHorizontal, 3, 0);
+
+    lineVertical = lv_line_create(screen);
+    lv_line_set_points(lineVertical, verticalPoints, 2);
+    lv_obj_set_style_line_color(lineVertical, lv_color_hex(0x00FF66), 0);
+    lv_obj_set_style_line_width(lineVertical, 3, 0);
+
+    centerCircle = lv_obj_create(screen);
+    lv_obj_set_size(centerCircle, 84, 84);
+    lv_obj_set_pos(centerCircle, 198, 208);
+    lv_obj_set_style_radius(centerCircle, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_bg_opa(centerCircle, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(centerCircle, 3, 0);
+    lv_obj_set_style_border_color(centerCircle, lv_color_hex(0x00FF66), 0);
 
     labelX = lv_label_create(screen);
     lv_label_set_text(labelX, "X: 0.00°");
