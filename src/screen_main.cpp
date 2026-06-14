@@ -20,6 +20,7 @@ static lv_obj_t* lineHorizontal = nullptr;
 static lv_obj_t* lineVertical = nullptr;
 static lv_obj_t* centerCircle = nullptr;
 static lv_obj_t* targetDot = nullptr;
+static lv_obj_t* tickMarks[8];
 static lv_obj_t* labelPrecision = nullptr;
 
 static lv_obj_t* outerDots[72];
@@ -32,7 +33,19 @@ static lv_point_precise_t horizontalPoints[] = {
 static lv_point_precise_t verticalPoints[] = {
     {240, 160},
     {240, 350}
+    };
+    static lv_point_precise_t tickPoints[8][2] = {
+    {{180, 240}, {180, 260}},
+    {{210, 240}, {210, 260}},
+    {{270, 240}, {270, 260}},
+    {{300, 240}, {300, 260}},
+
+    {{230, 190}, {250, 190}},
+    {{230, 220}, {250, 220}},
+    {{230, 280}, {250, 280}},
+    {{230, 310}, {250, 310}}
 };
+
 
 static lv_color_t get_state_color(SystemState state)
 {
@@ -72,6 +85,31 @@ static void create_outer_ring(lv_obj_t* screen)
         lv_obj_set_style_bg_color(outerDots[i], lv_color_hex(0x333333), 0);
     }
 }
+static void create_tick_marks(lv_obj_t* screen)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        tickMarks[i] = lv_line_create(screen);
+
+        lv_line_set_points(
+            tickMarks[i],
+            tickPoints[i],
+            2
+        );
+
+        lv_obj_set_style_line_color(
+            tickMarks[i],
+            lv_color_hex(0x00FF66),
+            0
+        );
+
+        lv_obj_set_style_line_width(
+            tickMarks[i],
+            2,
+            0
+        );
+    }
+}
 
 void screen_main_create()
 {
@@ -81,6 +119,7 @@ void screen_main_create()
     lv_obj_set_style_bg_color(screen, lv_color_black(), 0);
 
     create_outer_ring(screen);
+    create_tick_marks(screen);
 
     labelTitle = lv_label_create(screen);
     lv_label_set_text(labelTitle, "BOHRVISION");
@@ -189,7 +228,7 @@ void screen_main_update()
 
     snprintf(buffer, sizeof(buffer), "Y: %.2f°", g_uiData.yAngle);
     lv_label_set_text(labelY, buffer);
-    
+
 snprintf(
     buffer,
     sizeof(buffer),
