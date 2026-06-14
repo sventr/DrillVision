@@ -162,6 +162,20 @@ void screen_main_update()
 
     lv_label_set_text(labelStatus, system_state_to_text(g_uiData.state));
     lv_obj_set_style_text_color(labelStatus, get_state_color(g_uiData.state), 0);
+    lv_color_t ringColor =
+    get_state_color(g_uiData.state);
+
+for (int i = 0; i < 72; i++)
+{
+    if (outerDots[i])
+    {
+        lv_obj_set_style_bg_color(
+            outerDots[i],
+            ringColor,
+            0
+        );
+    }
+}
 
     if (targetDot)
     {
