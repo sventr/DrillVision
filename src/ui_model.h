@@ -8,6 +8,7 @@ struct UiData
     float yAngle;
 
     float batteryPercent;
+    float temperatureC;
 
     bool wifiConnected;
     bool usbConnected;

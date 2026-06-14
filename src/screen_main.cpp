@@ -189,15 +189,16 @@ void screen_main_update()
 
     snprintf(buffer, sizeof(buffer), "Y: %.2f°", g_uiData.yAngle);
     lv_label_set_text(labelY, buffer);
-
-    snprintf(
-        buffer,
-        sizeof(buffer),
-        "WiFi:%s  USB:%s  BAT:%.0f%%",
-        g_uiData.wifiConnected ? "ON" : "OFF",
-        g_uiData.usbConnected ? "ON" : "OFF",
-        g_uiData.batteryPercent
-    );
+    
+snprintf(
+    buffer,
+    sizeof(buffer),
+    "WiFi:%s  USB:%s  BAT:%.0f%%  %.1fC",
+    g_uiData.wifiConnected ? "ON" : "OFF",
+    g_uiData.usbConnected ? "ON" : "OFF",
+    g_uiData.batteryPercent,
+    g_uiData.temperatureC
+);
     lv_label_set_text(labelStatusBar, buffer);
 
     lv_label_set_text(labelStatus, system_state_to_text(g_uiData.state));
