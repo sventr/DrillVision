@@ -7,6 +7,7 @@
 #include "system_state.h"
 #include "calibration.h"
 #include "ui_model.h"
+#include "battery_manager.h"
 
 DrillVisionApp DrillVision;
 
@@ -20,6 +21,7 @@ void DrillVisionApp::begin()
     Serial.println("=================================");
 
     sensor_init();
+    battery_init();
     display_init();
     calibration_init();
 }
@@ -37,4 +39,7 @@ void DrillVisionApp::update()
     SystemState state = system_state_from_angles(x, y);
 
     display_update(x, y, state);
+    g_uiData.batteryPercent = battery_get_percent();
+g_uiData.charging = battery_is_charging();
+g_uiData.usbConnected = battery_usb_connected();
 }
