@@ -6,6 +6,7 @@
 #include "display_manager.h"
 #include "system_state.h"
 #include "calibration.h"
+#include "ui_model.h"
 
 DrillVisionApp DrillVision;
 
