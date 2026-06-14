@@ -6,6 +6,8 @@
 #include "lvgl_port.h"
 #include "screen_manager.h"
 
+static uint32_t lastSwitch = 0;
+
 void display_init()
 {
     Serial.println("Display Manager gestartet");
@@ -27,4 +29,11 @@ void display_update(float xAngle, float yAngle, SystemState state)
     );
 
     lvgl_port_update();
+    screen_manager_update();
+
+    if (millis() - lastSwitch > 5000)
+    {
+        lastSwitch = millis();
+        screen_manager_next();
+    }
 }

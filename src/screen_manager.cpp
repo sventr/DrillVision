@@ -45,3 +45,16 @@ ScreenId screen_manager_get_current()
 {
     return currentScreen;
 }
+void screen_manager_next()
+{
+    switch (currentScreen)
+    {
+        case ScreenId::Main:
+            screen_manager_show(ScreenId::Calibration);
+            break;
+
+        case ScreenId::Calibration:
+            screen_manager_show(ScreenId::Main);
+            break;
+    }
+}
