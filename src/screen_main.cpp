@@ -7,7 +7,6 @@
 #include "system_state.h"
 #include "config.h"
 
-
 static lv_obj_t* labelTitle = nullptr;
 static lv_obj_t* labelVersion = nullptr;
 static lv_obj_t* labelStatusBar = nullptr;
@@ -15,15 +14,18 @@ static lv_obj_t* labelX = nullptr;
 static lv_obj_t* labelY = nullptr;
 static lv_obj_t* labelStatus = nullptr;
 static lv_obj_t* labelCalibration = nullptr;
+static lv_obj_t* labelPrecision = nullptr;
 
 static lv_obj_t* lineHorizontal = nullptr;
 static lv_obj_t* lineVertical = nullptr;
 static lv_obj_t* centerCircle = nullptr;
 static lv_obj_t* targetDot = nullptr;
-static lv_obj_t* tickMarks[8];
-static lv_obj_t* labelPrecision = nullptr;
 
 static lv_obj_t* outerDots[72];
+static lv_obj_t* tickMarks[8];
+
+static constexpr float DEGREES_PER_DIV = 0.1f;
+static constexpr float PIXELS_PER_DIV = 30.0f;
 
 static lv_point_precise_t horizontalPoints[] = {
     {115, 250},
@@ -33,8 +35,9 @@ static lv_point_precise_t horizontalPoints[] = {
 static lv_point_precise_t verticalPoints[] = {
     {240, 160},
     {240, 350}
-    };
-    static lv_point_precise_t tickPoints[8][2] = {
+};
+
+static lv_point_precise_t tickPoints[8][2] = {
     {{180, 240}, {180, 260}},
     {{210, 240}, {210, 260}},
     {{270, 240}, {270, 260}},
@@ -46,17 +49,19 @@ static lv_point_precise_t verticalPoints[] = {
     {{230, 310}, {250, 310}}
 };
 
-
 static lv_color_t get_state_color(SystemState state)
 {
     switch (state)
     {
         case SystemState::InLevel:
             return lv_color_hex(0x00FF66);
+
         case SystemState::Warning:
             return lv_color_hex(0xFFCC00);
+
         case SystemState::Alarm:
             return lv_color_hex(0xFF3300);
+
         default:
             return lv_color_hex(0xFFFFFF);
     }
@@ -85,6 +90,7 @@ static void create_outer_ring(lv_obj_t* screen)
         lv_obj_set_style_bg_color(outerDots[i], lv_color_hex(0x333333), 0);
     }
 }
+
 static void create_tick_marks(lv_obj_t* screen)
 {
     for (int i = 0; i < 8; i++)
@@ -132,33 +138,19 @@ void screen_main_create()
     lv_obj_align(labelVersion, LV_ALIGN_TOP_MID, 0, 70);
 
     labelStatusBar = lv_label_create(screen);
-    lv_label_set_text(labelStatusBar, "WiFi:OFF  USB:ON  BAT:100%");
+    lv_label_set_text(labelStatusBar, "WiFi:OFF  USB:ON  BAT:100%  23.5C");
     lv_obj_set_style_text_color(labelStatusBar, lv_color_white(), 0);
     lv_obj_align(labelStatusBar, LV_ALIGN_TOP_MID, 0, 110);
 
     labelCalibration = lv_label_create(screen);
     lv_label_set_text(labelCalibration, "CAL ✓");
-        labelPrecision = lv_label_create(screen);
-
-    lv_label_set_text(
-        labelPrecision,
-        "0.1° / DIV"
-    );
-
-    lv_obj_set_style_text_color(
-        labelPrecision,
-        lv_color_white(),
-        0
-    );
-
-    lv_obj_align(
-        labelPrecision,
-        LV_ALIGN_BOTTOM_MID,
-        0,
-        -10
-    );
     lv_obj_set_style_text_color(labelCalibration, lv_color_hex(0x00FF66), 0);
     lv_obj_align(labelCalibration, LV_ALIGN_TOP_RIGHT, -55, 135);
+
+    labelPrecision = lv_label_create(screen);
+    lv_label_set_text(labelPrecision, "0.1° / DIV");
+    lv_obj_set_style_text_color(labelPrecision, lv_color_white(), 0);
+    lv_obj_align(labelPrecision, LV_ALIGN_BOTTOM_MID, 0, -10);
 
     lineHorizontal = lv_line_create(screen);
     lv_line_set_points(lineHorizontal, horizontalPoints, 2);
@@ -203,23 +195,15 @@ void screen_main_create()
 
 void screen_main_update()
 {
-    if (!labelX || !labelY || !labelStatusBar || !labelStatus)
+    if (!labelX ||
+        !labelY ||
+        !labelStatusBar ||
+        !labelStatus ||
+        !labelCalibration ||
+        !labelPrecision)
     {
         return;
     }
-    if (!labelX || !labelY || !labelStatusBar || !labelStatus || !labelCalibration)
-    if (!labelX ||
-    !labelY ||
-    !labelStatusBar ||
-    !labelStatus ||
-    !labelCalibration ||
-    !labelPrecision)
-{
-    return;
-}
-{
-    return;
-}
 
     char buffer[96];
 
@@ -229,77 +213,70 @@ void screen_main_update()
     snprintf(buffer, sizeof(buffer), "Y: %.2f°", g_uiData.yAngle);
     lv_label_set_text(labelY, buffer);
 
-snprintf(
-    buffer,
-    sizeof(buffer),
-    "WiFi:%s  USB:%s  BAT:%.0f%%  %.1fC",
-    g_uiData.wifiConnected ? "ON" : "OFF",
-    g_uiData.usbConnected ? "ON" : "OFF",
-    g_uiData.batteryPercent,
-    g_uiData.temperatureC
-);
+    snprintf(
+        buffer,
+        sizeof(buffer),
+        "WiFi:%s  USB:%s  BAT:%.0f%%  %.1fC",
+        g_uiData.wifiConnected ? "ON" : "OFF",
+        g_uiData.usbConnected ? "ON" : "OFF",
+        g_uiData.batteryPercent,
+        g_uiData.temperatureC
+    );
     lv_label_set_text(labelStatusBar, buffer);
 
     lv_label_set_text(labelStatus, system_state_to_text(g_uiData.state));
     lv_obj_set_style_text_color(labelStatus, get_state_color(g_uiData.state), 0);
+
     lv_obj_set_style_text_color(
-    labelCalibration,
-    get_state_color(g_uiData.state),
-    0
-);
-   float deviation =
-    fmax(
-        fabs(g_uiData.xAngle),
-        fabs(g_uiData.yAngle)
+        labelCalibration,
+        get_state_color(g_uiData.state),
+        0
     );
 
-lv_color_t ringColor =
-    get_state_color(g_uiData.state);
+    float deviation = fmax(fabs(g_uiData.xAngle), fabs(g_uiData.yAngle));
+    lv_color_t ringColor = get_state_color(g_uiData.state);
 
-int activeDots =
-    (int)(deviation * 24.0f);
+    int activeDots = (int)(deviation * 24.0f);
 
-if (activeDots < 1)
-{
-    activeDots = 1;
-}
-
-if (activeDots > 72)
-{
-    activeDots = 72;
-}
-
-for (int i = 0; i < 72; i++)
-{
-    if (!outerDots[i])
+    if (activeDots < 1)
     {
-        continue;
+        activeDots = 1;
     }
 
-    if (i < activeDots)
+    if (activeDots > 72)
     {
-        lv_obj_set_style_bg_color(
-            outerDots[i],
-            ringColor,
-            0
-        );
+        activeDots = 72;
     }
-    else
+
+    for (int i = 0; i < 72; i++)
     {
-        lv_obj_set_style_bg_color(
-            outerDots[i],
-            lv_color_hex(0x333333),
-            0
-        );
+        if (!outerDots[i])
+        {
+            continue;
+        }
+
+        if (i < activeDots)
+        {
+            lv_obj_set_style_bg_color(outerDots[i], ringColor, 0);
+        }
+        else
+        {
+            lv_obj_set_style_bg_color(outerDots[i], lv_color_hex(0x333333), 0);
+        }
     }
-}
 
     if (targetDot)
     {
-        float scale = 12.0f;
+        float pixelsPerDegree = PIXELS_PER_DIV / DEGREES_PER_DIV;
 
-        int xOffset = (int)(g_uiData.xAngle * scale);
-        int yOffset = (int)(g_uiData.yAngle * scale);
+        int xOffset = (int)(g_uiData.xAngle * pixelsPerDegree);
+        int yOffset = (int)(g_uiData.yAngle * pixelsPerDegree);
+
+        if (xOffset > 80) xOffset = 80;
+        if (xOffset < -80) xOffset = -80;
+
+        if (yOffset > 80) yOffset = 80;
+        if (yOffset < -80) yOffset = -80;
 
         lv_obj_set_pos(targetDot, 233 + xOffset, 243 + yOffset);
     }
