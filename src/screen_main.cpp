@@ -16,6 +16,7 @@ static lv_obj_t* labelStatus = nullptr;
 static lv_obj_t* lineHorizontal = nullptr;
 static lv_obj_t* lineVertical = nullptr;
 static lv_obj_t* centerCircle = nullptr;
+static lv_obj_t* targetDot = nullptr;
 
 static lv_point_precise_t horizontalPoints[] = {
     {115, 250},
@@ -33,10 +34,13 @@ static lv_color_t get_state_color(SystemState state)
     {
         case SystemState::InLevel:
             return lv_color_hex(0x00FF66);
+
         case SystemState::Warning:
             return lv_color_hex(0xFFCC00);
+
         case SystemState::Alarm:
             return lv_color_hex(0xFF3300);
+
         default:
             return lv_color_hex(0xFFFFFF);
     }
@@ -47,55 +51,222 @@ void screen_main_create()
     Serial.println("Main Screen LVGL erstellt");
 
     lv_obj_t* screen = lv_scr_act();
-    lv_obj_set_style_bg_color(screen, lv_color_black(), 0);
+
+    lv_obj_set_style_bg_color(
+        screen,
+        lv_color_black(),
+        0
+    );
 
     labelTitle = lv_label_create(screen);
     lv_label_set_text(labelTitle, "BOHRVISION");
-    lv_obj_set_style_text_color(labelTitle, lv_color_hex(0x00FF66), 0);
-    lv_obj_align(labelTitle, LV_ALIGN_TOP_MID, 0, 40);
+    lv_obj_set_style_text_color(
+        labelTitle,
+        lv_color_hex(0x00FF66),
+        0
+    );
+    lv_obj_align(
+        labelTitle,
+        LV_ALIGN_TOP_MID,
+        0,
+        40
+    );
 
     labelVersion = lv_label_create(screen);
-    lv_label_set_text(labelVersion, PROJECT_VERSION);
-    lv_obj_set_style_text_color(labelVersion, lv_color_white(), 0);
-    lv_obj_align(labelVersion, LV_ALIGN_TOP_MID, 0, 70);
+    lv_label_set_text(
+        labelVersion,
+        PROJECT_VERSION
+    );
+    lv_obj_set_style_text_color(
+        labelVersion,
+        lv_color_white(),
+        0
+    );
+    lv_obj_align(
+        labelVersion,
+        LV_ALIGN_TOP_MID,
+        0,
+        70
+    );
 
     labelStatusBar = lv_label_create(screen);
-    lv_label_set_text(labelStatusBar, "WiFi:OFF  USB:ON  BAT:100%");
-    lv_obj_set_style_text_color(labelStatusBar, lv_color_white(), 0);
-    lv_obj_align(labelStatusBar, LV_ALIGN_TOP_MID, 0, 110);
+    lv_label_set_text(
+        labelStatusBar,
+        "WiFi:OFF  USB:ON  BAT:100%"
+    );
+    lv_obj_set_style_text_color(
+        labelStatusBar,
+        lv_color_white(),
+        0
+    );
+    lv_obj_align(
+        labelStatusBar,
+        LV_ALIGN_TOP_MID,
+        0,
+        110
+    );
 
     lineHorizontal = lv_line_create(screen);
-    lv_line_set_points(lineHorizontal, horizontalPoints, 2);
-    lv_obj_set_style_line_color(lineHorizontal, lv_color_hex(0x00FF66), 0);
-    lv_obj_set_style_line_width(lineHorizontal, 3, 0);
+    lv_line_set_points(
+        lineHorizontal,
+        horizontalPoints,
+        2
+    );
+    lv_obj_set_style_line_color(
+        lineHorizontal,
+        lv_color_hex(0x00FF66),
+        0
+    );
+    lv_obj_set_style_line_width(
+        lineHorizontal,
+        3,
+        0
+    );
 
     lineVertical = lv_line_create(screen);
-    lv_line_set_points(lineVertical, verticalPoints, 2);
-    lv_obj_set_style_line_color(lineVertical, lv_color_hex(0x00FF66), 0);
-    lv_obj_set_style_line_width(lineVertical, 3, 0);
+    lv_line_set_points(
+        lineVertical,
+        verticalPoints,
+        2
+    );
+    lv_obj_set_style_line_color(
+        lineVertical,
+        lv_color_hex(0x00FF66),
+        0
+    );
+    lv_obj_set_style_line_width(
+        lineVertical,
+        3,
+        0
+    );
 
     centerCircle = lv_obj_create(screen);
-    lv_obj_set_size(centerCircle, 84, 84);
-    lv_obj_set_pos(centerCircle, 198, 208);
-    lv_obj_set_style_radius(centerCircle, LV_RADIUS_CIRCLE, 0);
-    lv_obj_set_style_bg_opa(centerCircle, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_border_width(centerCircle, 3, 0);
-    lv_obj_set_style_border_color(centerCircle, lv_color_hex(0x00FF66), 0);
+
+    lv_obj_set_size(
+        centerCircle,
+        84,
+        84
+    );
+
+    lv_obj_set_pos(
+        centerCircle,
+        198,
+        208
+    );
+
+    lv_obj_set_style_radius(
+        centerCircle,
+        LV_RADIUS_CIRCLE,
+        0
+    );
+
+    lv_obj_set_style_bg_opa(
+        centerCircle,
+        LV_OPA_TRANSP,
+        0
+    );
+
+    lv_obj_set_style_border_width(
+        centerCircle,
+        3,
+        0
+    );
+
+    lv_obj_set_style_border_color(
+        centerCircle,
+        lv_color_hex(0x00FF66),
+        0
+    );
+
+    targetDot = lv_obj_create(screen);
+
+    lv_obj_set_size(
+        targetDot,
+        14,
+        14
+    );
+
+    lv_obj_set_style_radius(
+        targetDot,
+        LV_RADIUS_CIRCLE,
+        0
+    );
+
+    lv_obj_set_style_border_width(
+        targetDot,
+        0,
+        0
+    );
+
+    lv_obj_set_style_bg_color(
+        targetDot,
+        lv_color_hex(0x00FF66),
+        0
+    );
+
+    lv_obj_set_pos(
+        targetDot,
+        233,
+        243
+    );
 
     labelX = lv_label_create(screen);
-    lv_label_set_text(labelX, "X: 0.00°");
-    lv_obj_set_style_text_color(labelX, lv_color_white(), 0);
-    lv_obj_align(labelX, LV_ALIGN_LEFT_MID, 45, 0);
+    lv_label_set_text(
+        labelX,
+        "X: 0.00°"
+    );
+
+    lv_obj_set_style_text_color(
+        labelX,
+        lv_color_white(),
+        0
+    );
+
+    lv_obj_align(
+        labelX,
+        LV_ALIGN_LEFT_MID,
+        45,
+        0
+    );
 
     labelY = lv_label_create(screen);
-    lv_label_set_text(labelY, "Y: 0.00°");
-    lv_obj_set_style_text_color(labelY, lv_color_white(), 0);
-    lv_obj_align(labelY, LV_ALIGN_BOTTOM_MID, 0, -75);
+    lv_label_set_text(
+        labelY,
+        "Y: 0.00°"
+    );
+
+    lv_obj_set_style_text_color(
+        labelY,
+        lv_color_white(),
+        0
+    );
+
+    lv_obj_align(
+        labelY,
+        LV_ALIGN_BOTTOM_MID,
+        0,
+        -75
+    );
 
     labelStatus = lv_label_create(screen);
-    lv_label_set_text(labelStatus, "STARTUP");
-    lv_obj_set_style_text_color(labelStatus, lv_color_white(), 0);
-    lv_obj_align(labelStatus, LV_ALIGN_BOTTOM_MID, 0, -35);
+
+    lv_label_set_text(
+        labelStatus,
+        "STARTUP"
+    );
+
+    lv_obj_set_style_text_color(
+        labelStatus,
+        lv_color_white(),
+        0
+    );
+
+    lv_obj_align(
+        labelStatus,
+        LV_ALIGN_BOTTOM_MID,
+        0,
+        -35
+    );
 }
 
 void screen_main_update()
@@ -107,11 +278,29 @@ void screen_main_update()
 
     char buffer[96];
 
-    snprintf(buffer, sizeof(buffer), "X: %.2f°", g_uiData.xAngle);
-    lv_label_set_text(labelX, buffer);
+    snprintf(
+        buffer,
+        sizeof(buffer),
+        "X: %.2f°",
+        g_uiData.xAngle
+    );
 
-    snprintf(buffer, sizeof(buffer), "Y: %.2f°", g_uiData.yAngle);
-    lv_label_set_text(labelY, buffer);
+    lv_label_set_text(
+        labelX,
+        buffer
+    );
+
+    snprintf(
+        buffer,
+        sizeof(buffer),
+        "Y: %.2f°",
+        g_uiData.yAngle
+    );
+
+    lv_label_set_text(
+        labelY,
+        buffer
+    );
 
     snprintf(
         buffer,
@@ -121,8 +310,38 @@ void screen_main_update()
         g_uiData.usbConnected ? "ON" : "OFF",
         g_uiData.batteryPercent
     );
-    lv_label_set_text(labelStatusBar, buffer);
 
-    lv_label_set_text(labelStatus, system_state_to_text(g_uiData.state));
-    lv_obj_set_style_text_color(labelStatus, get_state_color(g_uiData.state), 0);
+    lv_label_set_text(
+        labelStatusBar,
+        buffer
+    );
+
+    lv_label_set_text(
+        labelStatus,
+        system_state_to_text(g_uiData.state)
+    );
+
+    lv_obj_set_style_text_color(
+        labelStatus,
+        get_state_color(g_uiData.state),
+        0
+    );
+
+    if (targetDot)
+    {
+        float scale = 12.0f;
+
+        int xOffset =
+            (int)(g_uiData.xAngle * scale);
+
+        int yOffset =
+            (int)(g_uiData.yAngle * scale);
+
+        lv_obj_set_pos(
+            targetDot,
+            233 + xOffset,
+            243 + yOffset
+        );
+    }
 }
+
