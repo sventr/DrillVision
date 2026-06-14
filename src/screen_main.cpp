@@ -19,6 +19,7 @@ static lv_obj_t* lineHorizontal = nullptr;
 static lv_obj_t* lineVertical = nullptr;
 static lv_obj_t* centerCircle = nullptr;
 static lv_obj_t* targetDot = nullptr;
+static lv_obj_t* labelPrecision = nullptr;
 
 static lv_obj_t* outerDots[72];
 
@@ -97,6 +98,25 @@ void screen_main_create()
 
     labelCalibration = lv_label_create(screen);
     lv_label_set_text(labelCalibration, "CAL ✓");
+        labelPrecision = lv_label_create(screen);
+
+    lv_label_set_text(
+        labelPrecision,
+        "0.1° / DIV"
+    );
+
+    lv_obj_set_style_text_color(
+        labelPrecision,
+        lv_color_white(),
+        0
+    );
+
+    lv_obj_align(
+        labelPrecision,
+        LV_ALIGN_BOTTOM_MID,
+        0,
+        -10
+    );
     lv_obj_set_style_text_color(labelCalibration, lv_color_hex(0x00FF66), 0);
     lv_obj_align(labelCalibration, LV_ALIGN_TOP_RIGHT, -55, 135);
 
@@ -148,6 +168,15 @@ void screen_main_update()
         return;
     }
     if (!labelX || !labelY || !labelStatusBar || !labelStatus || !labelCalibration)
+    if (!labelX ||
+    !labelY ||
+    !labelStatusBar ||
+    !labelStatus ||
+    !labelCalibration ||
+    !labelPrecision)
+{
+    return;
+}
 {
     return;
 }
