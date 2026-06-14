@@ -3,11 +3,13 @@
 #include "display_manager.h"
 #include "config.h"
 #include "system_state.h"
+#include "lvgl_port.h"
 
 void display_init()
 {
     Serial.println("Display Manager gestartet");
     Serial.println("Display Hardware noch nicht aktiv");
+    lvgl_port_init();
 }
 
 void display_update(float xAngle, float yAngle, SystemState state)
@@ -19,5 +21,6 @@ void display_update(float xAngle, float yAngle, SystemState state)
         xAngle,
         yAngle,
         system_state_to_text(state)
+        lvgl_port_update();
     );
 }
