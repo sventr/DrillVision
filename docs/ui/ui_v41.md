@@ -2,45 +2,39 @@
 
 ## Display
 
-- Resolution: 480 x 480 px
-- Shape: round
-- Background: black
-- Primary color: neon green
-- Warning color: yellow
-- Alarm color: red
-- Text color: white
+* Resolution: 480 x 480 px
+* Shape: round
+* Background: black
+* Primary color: neon green
+* Warning color: yellow
+* Alarm color: red
+* Text color: white
 
 ## Main Screen
 
 ### Header
 
-- Position: top center
-- Project name: BOHRVISION
-- Version: V4.1
+* Position: top center
+* Project name: BOHRVISION
+* Version: V4.1
 
 ### Status Bar
 
-Position: upper third
-
-Items:
-
-- WiFi signal
-- USB connection
-- Battery level
-- Charging status
-- Temperature
+* Position: upper third
+* WiFi signal
+* USB connection
+* Battery level
+* Charging status
+* Temperature
 
 ### Center Crosshair
 
-Position: center
-
-Elements:
-
-- horizontal axis
-- vertical axis
-- center circle
-- tick marks
-- moving center point
+* Position: center
+* Horizontal axis
+* Vertical axis
+* Center circle
+* Tick marks
+* Moving center point
 
 Purpose:
 
@@ -54,116 +48,179 @@ Left side:
 X
 +0.2°
 ROLL
+```
 
 Bottom center:
 
+```text
 Y
 -0.3°
 PITCH
-Outer Ring
+```
+
+## Outer Ring
 
 Purpose:
 
 Visual indication of deviation.
 
-Rules:
+| Deviation   | Color  | Meaning      |
+| ----------- | ------ | ------------ |
+| 0.0° - 0.3° | Green  | In level     |
+| 0.3° - 1.0° | Yellow | Warning      |
+| > 1.0°      | Red    | Out of level |
 
-Deviation	Color	Meaning
-0.0° - 0.3°	Green	In level
-0.3° - 1.0°	Yellow	Warning
-> 1.0°	Red	Out of level
-Bottom Controls
-Menu button
-Calibration button
-Precision display: 0.1° / DIV
-Calibration State
-Text: KALIBRIERT
-Icon: green check mark
-Only visible when calibration is valid
-Screen States
-Normal
+## Bottom Controls
+
+* Menu button
+* Calibration button
+* Precision display: 0.1° / DIV
+
+## Calibration State
+
+* Text: KALIBRIERT
+* Icon: green check mark
+* Only visible when calibration is valid
+
+## Screen States
+
+### Normal
 
 Shows live X/Y angle values.
 
-In Level
+### In Level
 
 Condition:
 
-abs(X) <= 0.3° and abs(Y) <= 0.3°
+```text
+abs(X) <= 0.3°
+abs(Y) <= 0.3°
+```
 
 Status text:
 
+```text
 IM LOT
-Warning
+```
+
+### Warning
 
 Condition:
 
+```text
 0.3° < deviation <= 1.0°
+```
 
 Status text:
 
+```text
 KORRIGIEREN
-Alarm
+```
+
+### Alarm
 
 Condition:
 
+```text
 deviation > 1.0°
+```
 
 Status text:
 
+```text
 AUSSER LOT
-Layout Coordinates
+```
 
-Display center:
+## Layout Coordinates
 
+### Display Center
+
+```text
 X = 240
 Y = 240
+```
 
-Main crosshair:
+### Main Crosshair
 
+```text
 Center: 240 / 250
 Horizontal line: x 115 - 365
 Vertical line: y 160 - 350
 Center circle: radius 42 px
+```
 
-Outer ring:
+### Outer Ring
 
+```text
 Center: 240 / 240
 Radius: 210 px
 Dot count: 72
 Dot size: 8 px
+```
 
-Header:
+### Header
 
+```text
 Project title: x 240 / y 58
 Version: x 240 / y 95
+```
 
-Status icons:
+### Status Icons
 
+```text
 WiFi: x 90 / y 125
 USB: x 165 / y 125
 Battery: x 240 / y 125
 Charge: x 315 / y 125
 Temp: x 390 / y 125
+```
 
-Angle values:
+### Angle Values
 
+```text
 X angle: x 90 / y 255
 Y angle: x 240 / y 365
+```
 
-Buttons:
+### Buttons
 
+```text
 Menu: x 120 / y 400
 Calibration: x 345 / y 400
-Future Screens
-Calibration screen
-Settings screen
-Battery screen
-WiFi / OTA screen
-Sensor diagnostics screen
+```
 
+## Future Screens
 
-```powershell
-git add .
-git commit -m "Add UI specification V4.1"
-git push
+* Calibration Screen
+* Settings Screen
+* Battery Screen
+* WiFi / OTA Screen
+* Sensor Diagnostics Screen
+
+## Firmware Mapping
+
+```text
+Sensor Manager
+      ↓
+Calibration Manager
+      ↓
+System State Manager
+      ↓
+UI Model
+      ↓
+Display Manager
+      ↓
+Screen Main
+      ↓
+LVGL
+      ↓
+LILYGO T-RGB Display
+```
+
+## Version
+
+Current Version:
+
+```text
+DrillVision V4.1
+```
