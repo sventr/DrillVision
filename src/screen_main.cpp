@@ -13,6 +13,7 @@ static lv_obj_t* labelStatusBar = nullptr;
 static lv_obj_t* labelX = nullptr;
 static lv_obj_t* labelY = nullptr;
 static lv_obj_t* labelStatus = nullptr;
+static lv_obj_t* labelCalibration = nullptr;
 
 static lv_obj_t* lineHorizontal = nullptr;
 static lv_obj_t* lineVertical = nullptr;
@@ -94,6 +95,11 @@ void screen_main_create()
     lv_obj_set_style_text_color(labelStatusBar, lv_color_white(), 0);
     lv_obj_align(labelStatusBar, LV_ALIGN_TOP_MID, 0, 110);
 
+    labelCalibration = lv_label_create(screen);
+    lv_label_set_text(labelCalibration, "CAL ✓");
+    lv_obj_set_style_text_color(labelCalibration, lv_color_hex(0x00FF66), 0);
+    lv_obj_align(labelCalibration, LV_ALIGN_TOP_RIGHT, -55, 135);
+
     lineHorizontal = lv_line_create(screen);
     lv_line_set_points(lineHorizontal, horizontalPoints, 2);
     lv_obj_set_style_line_color(lineHorizontal, lv_color_hex(0x00FF66), 0);
@@ -141,6 +147,10 @@ void screen_main_update()
     {
         return;
     }
+    if (!labelX || !labelY || !labelStatusBar || !labelStatus || !labelCalibration)
+{
+    return;
+}
 
     char buffer[96];
 
