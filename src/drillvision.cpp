@@ -8,6 +8,7 @@
 #include "calibration.h"
 #include "ui_model.h"
 #include "battery_manager.h"
+#include "telemetry.h"
 
 DrillVisionApp DrillVision;
 
@@ -24,6 +25,7 @@ void DrillVisionApp::begin()
     battery_init();
     display_init();
     calibration_init();
+    telemetry_init();
 }
 
 void DrillVisionApp::update()
@@ -39,6 +41,7 @@ void DrillVisionApp::update()
     SystemState state = system_state_from_angles(x, y);
 
     display_update(x, y, state);
+    telemetry_send();
     g_uiData.batteryPercent = battery_get_percent();
 g_uiData.charging = battery_is_charging();
 g_uiData.usbConnected = battery_usb_connected();
