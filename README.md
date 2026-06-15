@@ -8,8 +8,8 @@ DrillVision zeigt die Neigung der Bohrmaschine in X- und Y-Richtung an und hilft
 
 ## Hardware
 
-- LILYGO T-RGB 2.8" ESP32-S3
-- BMI270 6-Achsen-Sensor
+- Waveshare ESP32-S3 Round Display
+- QMI8658
 - 1000 mAh LiPo-Akku
 - Aluminiumgehäuse mit USB-C-Ladeausschnitt
 
@@ -30,7 +30,7 @@ DrillVision zeigt die Neigung der Bohrmaschine in X- und Y-Richtung an und hilft
 ## Roadmap
 
 - BMI270 anbinden
-- Displaytreiber für LILYGO T-RGB einrichten
+- Displaytreiber für Waveshare ESP32-S3 Round Display einrichten
 - Fadenkreuz-UI erstellen
 - Akkuanzeige integrieren
 - Kalibrierung speichern
@@ -38,3 +38,23 @@ DrillVision zeigt die Neigung der Bohrmaschine in X- und Y-Richtung an und hilft
 docs/architecture.md
 docs/telemetry.md
 docs/hardware.md
+
+Controller
+- Waveshare ESP32-S3 Round Display
+
+MCU
+- ESP32-S3
+
+Display
+- 480x480 Round LCD
+
+IMU
+- QMI8658
+
+Software
+- Arduino
+- LVGL 9
+
+Telemetry
+- JSON over USB Serial
+- LabVIEW compatible

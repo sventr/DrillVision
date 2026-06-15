@@ -24,3 +24,13 @@ UI
  ├─ Diagnostics
  ├─ Battery
  └─ Wifi
+
+ Sensor Layer
+    ↓
+QMI8658
+    ↓
+Calibration
+    ↓
+System State
+    ↓
+UI + Telemetry
