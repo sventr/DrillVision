@@ -6,6 +6,7 @@
 #include "screen_diagnostics.h"
 #include "screen_battery.h"
 #include "screen_wifi.h"
+#include <lvgl.h>
 
 static ScreenId currentScreen = ScreenId::Main;
 
@@ -48,6 +49,8 @@ void screen_manager_update()
 void screen_manager_show(ScreenId screen)
 {
     currentScreen = screen;
+
+    lv_obj_clean(lv_scr_act());
 
     switch (currentScreen)
     {
