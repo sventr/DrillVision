@@ -204,3 +204,88 @@ Software:
 - Multi-screen framework complete
 - Hardware abstraction layer complete
 - Waiting for hardware integration
+
+# DrillVision
+
+## Current Status
+
+Version: V4.17
+
+### Software Status
+
+* Multi-screen UI architecture complete
+* Main Screen implemented
+* Calibration Screen implemented
+* Settings Screen implemented
+* Diagnostics Screen implemented
+* Battery Screen implemented
+* WiFi / OTA Screen implemented
+
+### Core Modules
+
+* Sensor Layer
+* Calibration Layer
+* System State Layer
+* UI Model
+* Display Manager
+* Screen Manager
+* Telemetry Manager
+
+### Hardware Abstraction Layer
+
+* Battery Manager (placeholder)
+* WiFi Manager (placeholder)
+* Diagnostics Manager (placeholder)
+
+### Telemetry
+
+JSON telemetry output available via USB Serial.
+
+Example:
+
+```json
+{
+  "device": "DrillVision",
+  "version": "4.17",
+  "timestamp": 15230,
+  "roll": 0.12,
+  "pitch": -0.35,
+  "battery": 100.0,
+  "temperature": 23.5,
+  "wifi": false,
+  "usb": false,
+  "charging": false,
+  "state": "IM LOT"
+}
+```
+
+### Build Status
+
+Platform: ESP32-S3 (LilyGO T-RGB)
+
+Current Memory Usage:
+
+* RAM: ~6.1%
+* Flash: ~11.7%
+
+### Git Tags
+
+* v4.03 – Dynamic Target Dot
+* v4.10 – UI Baseline
+* v4.14 – Multi Screen Architecture
+* v4.15 – Complete Screen Architecture
+* v4.17 – JSON Telemetry
+
+### Hardware Status
+
+Hardware integration pending.
+
+Planned hardware tests:
+
+1. Display bring-up
+2. BMI270 sensor validation
+3. Touch controller validation
+4. Battery subsystem validation
+5. WiFi / OTA validation
+
+Expected hardware arrival: pending.

@@ -34,3 +34,7 @@ DrillVision zeigt die Neigung der Bohrmaschine in X- und Y-Richtung an und hilft
 - Fadenkreuz-UI erstellen
 - Akkuanzeige integrieren
 - Kalibrierung speichern
+
+docs/architecture.md
+docs/telemetry.md
+docs/hardware.md
