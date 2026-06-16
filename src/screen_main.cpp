@@ -248,36 +248,36 @@ void screen_main_update()
         activeDots = 72;
     }
 
-    for (int i = 0; i < 72; i++)
-    {
-        if (!outerDots[i])
-        {
-            continue;
-        }
+    
 
-        if (i < activeDots)
-        {
-            lv_obj_set_style_bg_color(outerDots[i], ringColor, 0);
-        }
-        else
-        {
-            lv_obj_set_style_bg_color(outerDots[i], lv_color_hex(0x333333), 0);
-        }
-    }
+   if (targetDot)
+{
+    float pixelsPerDegree = PIXELS_PER_DIV / DEGREES_PER_DIV;
 
-    if (targetDot)
-    {
-        float pixelsPerDegree = PIXELS_PER_DIV / DEGREES_PER_DIV;
+int xOffset = (int)(g_uiData.yAngle * pixelsPerDegree);
+int yOffset = (int)(g_uiData.xAngle * pixelsPerDegree);
 
-        int xOffset = (int)(g_uiData.xAngle * pixelsPerDegree);
-        int yOffset = (int)(g_uiData.yAngle * pixelsPerDegree);
+    if (xOffset > 80) xOffset = 80;
+    if (xOffset < -80) xOffset = -80;
 
-        if (xOffset > 80) xOffset = 80;
-        if (xOffset < -80) xOffset = -80;
+    if (yOffset > 80) yOffset = 80;
+    if (yOffset < -80) yOffset = -80;
 
-        if (yOffset > 80) yOffset = 80;
-        if (yOffset < -80) yOffset = -80;
+    float targetX = 240.0f + xOffset;
+    float targetY = 250.0f + yOffset;
 
-        lv_obj_set_pos(targetDot, 233 + xOffset, 243 + yOffset);
-    }
+    static float smoothX = 240.0f;
+    static float smoothY = 250.0f;
+
+    const float alpha = 0.14f;
+
+    smoothX = smoothX + alpha * (targetX - smoothX);
+    smoothY = smoothY + alpha * (targetY - smoothY);
+
+    lv_obj_set_pos(
+        targetDot,
+        (int)smoothX - 7,
+        (int)smoothY - 7
+    );
+}
 }

@@ -16,35 +16,6 @@ void screen_manager_init()
     screen_main_create();
 }
 
-void screen_manager_update()
-{
-    switch (currentScreen)
-    {
-        case ScreenId::Main:
-            screen_main_update();
-            break;
-
-        case ScreenId::Calibration:
-            screen_calibration_update();
-            break;
-
-        case ScreenId::Settings:
-            screen_settings_update();
-            break;
-
-        case ScreenId::Diagnostics:
-            screen_diagnostics_update();
-            break;
-
-        case ScreenId::Battery:
-            screen_battery_update();
-            break;
-
-        case ScreenId::Wifi:
-            screen_wifi_update();
-            break;
-    }
-}
 
 void screen_manager_show(ScreenId screen)
 {

@@ -90,8 +90,10 @@ void sensor_update()
 
     AngleResult angle = calculate_angles(ax, ay, az);
 
-    xAngle = angle.x;
-    yAngle = angle.y;
+   const float alpha = 0.15f;
+
+xAngle = xAngle + alpha * (angle.x - xAngle);
+yAngle = yAngle + alpha * (angle.y - yAngle);
 
     static uint32_t lastPrint = 0;
 
