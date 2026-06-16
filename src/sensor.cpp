@@ -11,8 +11,6 @@ static float xAngle = 0.0f;
 static float yAngle = 0.0f;
 
 static const uint8_t QMI8658_ADDR = 0x6B;
-
-// QMI8658 output registers
 static const uint8_t QMI8658_AX_L = 0x35;
 
 static int16_t read_i16(uint8_t reg)
@@ -43,17 +41,16 @@ static uint8_t write_register(uint8_t reg, uint8_t value)
     Wire.beginTransmission(QMI8658_ADDR);
     Wire.write(reg);
     Wire.write(value);
+
     return Wire.endTransmission();
 }
 
 static void qmi8658_configure()
 {
-    // Enable accelerometer and gyroscope
-    // This is a basic bringup configuration.
-    write_register(0x02, 0x60); // Ctrl1
-    write_register(0x03, 0x03); // Ctrl2 accelerometer range/odr placeholder
-    write_register(0x04, 0x54); // Ctrl3 gyroscope placeholder
-    write_register(0x08, 0x03); // Ctrl7 enable accel + gyro
+    write_register(0x02, 0x60);
+    write_register(0x03, 0x03);
+    write_register(0x04, 0x54);
+    write_register(0x08, 0x03);
 }
 
 void sensor_init()
@@ -69,7 +66,7 @@ void sensor_init()
     }
     else
     {
-        Serial.println("QMI8658 nicht verfügbar, Sensorwerte bleiben 0");
+        Serial.println("QMI8658 nicht verfügbar");
     }
 
 #else
@@ -87,8 +84,6 @@ void sensor_update()
     int16_t rawAy = read_i16(QMI8658_AX_L + 2);
     int16_t rawAz = read_i16(QMI8658_AX_L + 4);
 
-    // Temporary scaling for bringup.
-    // Exact scale will be tuned after raw data validation.
     float ax = rawAx / 4096.0f;
     float ay = rawAy / 4096.0f;
     float az = rawAz / 4096.0f;
@@ -97,6 +92,19 @@ void sensor_update()
 
     xAngle = angle.x;
     yAngle = angle.y;
+
+    static uint32_t lastPrint = 0;
+
+    if (millis() - lastPrint > 1000)
+    {
+        lastPrint = millis();
+
+        Serial.printf(
+            "ROLL: %.2f  PITCH: %.2f\n",
+            xAngle,
+            yAngle
+        );
+    }
 
 #else
 
