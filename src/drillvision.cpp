@@ -22,10 +22,10 @@ void DrillVisionApp::begin()
     Serial.println("=================================");
 
     sensor_init();
-    battery_init();
-    display_init();
     calibration_init();
+    battery_init();
     telemetry_init();
+    display_init();
 }
 
 void DrillVisionApp::update()
@@ -40,9 +40,15 @@ void DrillVisionApp::update()
 
     SystemState state = system_state_from_angles(x, y);
 
-    display_update(x, y, state);
-    telemetry_send();
+    g_uiData.xAngle = x;
+    g_uiData.yAngle = y;
+    g_uiData.state = state;
+
     g_uiData.batteryPercent = battery_get_percent();
-g_uiData.charging = battery_is_charging();
-g_uiData.usbConnected = battery_usb_connected();
+    g_uiData.charging = battery_is_charging();
+    g_uiData.usbConnected = battery_usb_connected();
+
+    display_update(x, y, state);
+
+    telemetry_send();
 }

@@ -4,8 +4,8 @@
 void setup()
 {
     Serial.begin(115200);
-    delay(1000);
-
+   delay(3000);
+Serial.println("HELLO WAVESHARE");
     DrillVision.begin();
 }
 

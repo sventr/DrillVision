@@ -4,6 +4,8 @@
 #include "telemetry.h"
 #include "ui_model.h"
 #include "system_state.h"
+#include "config.h"
+
 static uint32_t lastSend = 0;
 
 void telemetry_init()
@@ -13,15 +15,16 @@ void telemetry_init()
 void telemetry_send()
 {
     if (millis() - lastSend < 100)
-{
-    return;
-}
+    {
+        return;
+    }
 
-lastSend = millis();
+    lastSend = millis();
+
     StaticJsonDocument<256> doc;
 
-    doc["device"] = "DrillVision";
-    doc["version"] = "4.16";
+    doc["device"] = PROJECT_NAME;
+    doc["version"] = PROJECT_VERSION;
 
     doc["timestamp"] = millis();
 
