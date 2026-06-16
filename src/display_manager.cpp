@@ -3,11 +3,12 @@
 #include "display_manager.h"
 #include "config.h"
 #include "system_state.h"
+#include "waveshare_display.h"
 
 void display_init()
 {
     Serial.println("Display Manager gestartet");
-    Serial.println("Display Hardware noch deaktiviert");
+    waveshare_display_init();
 }
 
 void display_update(float xAngle, float yAngle, SystemState state)
