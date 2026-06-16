@@ -27,17 +27,17 @@ static lv_obj_t* tickMarks[8];
 static constexpr float DEGREES_PER_DIV = 0.1f;
 static constexpr float PIXELS_PER_DIV = 30.0f;
 
-static lv_point_precise_t horizontalPoints[] = {
+static lv_point_t horizontalPoints[] = {
     {115, 250},
     {365, 250}
 };
 
-static lv_point_precise_t verticalPoints[] = {
+static lv_point_t verticalPoints[] = {
     {240, 160},
     {240, 350}
 };
 
-static lv_point_precise_t tickPoints[8][2] = {
+static lv_point_t tickPoints[8][2] = {
     {{180, 240}, {180, 260}},
     {{210, 240}, {210, 260}},
     {{270, 240}, {270, 260}},
