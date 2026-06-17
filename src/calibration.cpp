@@ -2,11 +2,13 @@
 
 static float g_xOffset = 0.0f;
 static float g_yOffset = 0.0f;
+static bool g_isCalibrated = false;
 
 void calibration_init()
 {
     g_xOffset = 0.0f;
     g_yOffset = 0.0f;
+    g_isCalibrated = false;
 }
 
 float calibration_apply_x(float rawX)
@@ -40,4 +42,10 @@ void calibration_set_zero(float currentX, float currentY)
         currentX + calibration_get_x_offset(),
         currentY + calibration_get_y_offset()
     );
+
+    g_isCalibrated = true;
+}
+bool calibration_is_calibrated()
+{
+    return g_isCalibrated;
 }

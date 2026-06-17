@@ -10,6 +10,8 @@
 
 static float xAngle = 0.0f;
 static float yAngle = 0.0f;
+static float rawXAngle = 0.0f;
+static float rawYAngle = 0.0f;
 
 static const uint8_t QMI8658_ADDR = 0x6B;
 static const uint8_t QMI8658_AX_L = 0x35;
@@ -95,6 +97,8 @@ void sensor_update()
     float az = rawAz / 4096.0f;
 
     AngleResult angle = calculate_angles(ax, ay, az);
+    rawXAngle = angle.x;
+rawYAngle = angle.y;
 
     float calibratedX = calibration_apply_x(angle.x);
     float calibratedY = calibration_apply_y(angle.y);
@@ -148,4 +152,13 @@ float sensor_get_x()
 float sensor_get_y()
 {
     return yAngle;
+}
+void sensor_calibrate_zero()
+{
+    calibration_set_offset(rawXAngle, rawYAngle);
+
+    xAngle = 0.0f;
+    yAngle = 0.0f;
+
+    sensor_reset_filter();
 }

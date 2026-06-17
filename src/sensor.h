@@ -6,3 +6,4 @@ void sensor_update();
 float sensor_get_x();
 float sensor_get_y();
 void sensor_reset_filter();
+void sensor_calibrate_zero();

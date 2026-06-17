@@ -6,6 +6,8 @@
 #include "ui_model.h"
 #include "system_state.h"
 #include "config.h"
+#include "sensor.h"
+#include "calibration.h"
 
 static lv_obj_t* labelTitle = nullptr;
 static lv_obj_t* labelVersion = nullptr;
@@ -15,6 +17,8 @@ static lv_obj_t* labelY = nullptr;
 static lv_obj_t* labelStatus = nullptr;
 static lv_obj_t* labelCalibration = nullptr;
 static lv_obj_t* labelPrecision = nullptr;
+static lv_obj_t* buttonCalibrate = nullptr;
+static lv_obj_t* labelCalibrationState = nullptr;
 
 static lv_obj_t* lineHorizontal = nullptr;
 static lv_obj_t* lineVertical = nullptr;
@@ -26,6 +30,8 @@ static lv_obj_t* tickMarks[8];
 
 static constexpr float DEGREES_PER_DIV = 0.1f;
 static constexpr float PIXELS_PER_DIV = 30.0f;
+static float smoothBubbleX = 240.0f;
+static float smoothBubbleY = 250.0f;
 
 static lv_point_t horizontalPoints[] = {
     {115, 250},
@@ -90,7 +96,6 @@ static void create_outer_ring(lv_obj_t* screen)
         lv_obj_set_style_bg_color(outerDots[i], lv_color_hex(0x333333), 0);
     }
 }
-
 static void create_tick_marks(lv_obj_t* screen)
 {
     for (int i = 0; i < 8; i++)
@@ -115,6 +120,18 @@ static void create_tick_marks(lv_obj_t* screen)
             0
         );
     }
+}
+
+static void calibrate_button_event_cb(lv_event_t* e)
+{
+   sensor_calibrate_zero();
+   smoothBubbleX = 240.0f;
+smoothBubbleY = 250.0f;
+
+if (targetDot)
+{
+    lv_obj_set_pos(targetDot, 233, 243);
+}
 }
 
 void screen_main_create()
@@ -191,6 +208,19 @@ void screen_main_create()
     lv_label_set_text(labelStatus, "STARTUP");
     lv_obj_set_style_text_color(labelStatus, lv_color_white(), 0);
     lv_obj_align(labelStatus, LV_ALIGN_BOTTOM_MID, 0, -35);
+
+    buttonCalibrate = lv_btn_create(lv_scr_act());
+lv_obj_set_size(buttonCalibrate, 170, 42);
+lv_obj_align(buttonCalibrate, LV_ALIGN_BOTTOM_MID, 0, -18);
+lv_obj_add_event_cb(buttonCalibrate, calibrate_button_event_cb, LV_EVENT_CLICKED, NULL);
+
+lv_obj_t* label = lv_label_create(buttonCalibrate);
+lv_label_set_text(label, "KALIBRIEREN");
+lv_obj_center(label);
+
+labelCalibrationState = lv_label_create(lv_scr_act());
+lv_label_set_text(labelCalibrationState, "NICHT KALIBRIERT");
+lv_obj_align(labelCalibrationState, LV_ALIGN_BOTTOM_MID, 0, -68);
 }
 
 void screen_main_update()
@@ -271,13 +301,27 @@ int yOffset = (int)(g_uiData.xAngle * pixelsPerDegree);
 
     const float alpha = 0.14f;
 
-    smoothX = smoothX + alpha * (targetX - smoothX);
-    smoothY = smoothY + alpha * (targetY - smoothY);
+smoothBubbleX = smoothBubbleX + alpha * (targetX - smoothBubbleX);
+smoothBubbleY = smoothBubbleY + alpha * (targetY - smoothBubbleY);
 
-    lv_obj_set_pos(
-        targetDot,
-        (int)smoothX - 7,
-        (int)smoothY - 7
-    );
+lv_obj_set_pos(
+    targetDot,
+    (int)smoothBubbleX - 7,
+    (int)smoothBubbleY - 7
+);
+}
+if (labelCalibrationState)
+{
+    if (calibration_is_calibrated())
+    {
+        lv_label_set_text(labelCalibrationState, "KALIBRIERT");
+        lv_obj_set_style_text_color(labelCalibrationState, lv_color_hex(0x00FF66), 0);
+    }
+    else
+    {
+        lv_label_set_text(labelCalibrationState, "NICHT KALIBRIERT");
+        lv_obj_set_style_text_color(labelCalibrationState, lv_color_hex(0xFF4444), 0);
+    }
 }
 }
+

@@ -95,12 +95,12 @@ lv_disp_draw_buf_init(
   lv_disp_drv_register( &disp_drv );
 
   /*Initialize the (dummy) input device driver*/
-// static lv_indev_drv_t indev_drv;
-// lv_indev_drv_init(&indev_drv);
-// indev_drv.type = LV_INDEV_TYPE_POINTER;
-// indev_drv.read_cb = Lvgl_Touchpad_Read;
-// lv_indev_drv_register(&indev_drv);
- // lv_indev_drv_register( &indev_drv );
+static lv_indev_drv_t indev_drv;
+ lv_indev_drv_init(&indev_drv);
+ indev_drv.type = LV_INDEV_TYPE_POINTER;
+ indev_drv.read_cb = Lvgl_Touchpad_Read;
+ lv_indev_drv_register(&indev_drv);
+ lv_indev_drv_register( &indev_drv );
 
   /* Create simple label */
   lv_obj_t *label = lv_label_create( lv_scr_act() );
