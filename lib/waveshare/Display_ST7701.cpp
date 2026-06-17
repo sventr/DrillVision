@@ -31,11 +31,13 @@ void ST7701_CS_Dis(){
   Set_EXIO(EXIO_PIN3,High);
   vTaskDelay(pdMS_TO_TICKS(10));
 }
-void ST7701_Reset(){
-  Set_EXIO(EXIO_PIN1,Low);
-  vTaskDelay(pdMS_TO_TICKS(10));
-  Set_EXIO(EXIO_PIN1,High);
-  vTaskDelay(pdMS_TO_TICKS(50));
+void ST7701_Reset()
+{
+  Set_EXIO(EXIO_PIN1, Low);
+  vTaskDelay(pdMS_TO_TICKS(100));
+
+  Set_EXIO(EXIO_PIN1, High);
+  vTaskDelay(pdMS_TO_TICKS(200));
 }
 void ST7701_Init()
 {
@@ -320,8 +322,8 @@ esp_lcd_rgb_panel_config_t rgb_config = {};
 rgb_config.clk_src = LCD_CLK_SRC_XTAL;
 
 rgb_config.timings.pclk_hz = ESP_PANEL_LCD_RGB_TIMING_FREQ_HZ;
-rgb_config.timings.h_res = ESP_PANEL_LCD_HEIGHT;
-rgb_config.timings.v_res = ESP_PANEL_LCD_WIDTH;
+rgb_config.timings.h_res = ESP_PANEL_LCD_WIDTH;
+rgb_config.timings.v_res = ESP_PANEL_LCD_HEIGHT;
 rgb_config.timings.hsync_pulse_width = ESP_PANEL_LCD_RGB_TIMING_HPW;
 rgb_config.timings.hsync_back_porch = ESP_PANEL_LCD_RGB_TIMING_HBP;
 rgb_config.timings.hsync_front_porch = ESP_PANEL_LCD_RGB_TIMING_HFP;
@@ -367,6 +369,7 @@ rgb_config.flags.fb_in_psram = true;
 esp_lcd_new_rgb_panel(&rgb_config, &panel_handle);
 esp_lcd_panel_reset(panel_handle);
 esp_lcd_panel_init(panel_handle);
+esp_lcd_panel_disp_on_off(panel_handle, true);
 }
 
 bool example_on_vsync_event(esp_lcd_panel_handle_t panel, const esp_lcd_rgb_panel_event_data_t *event_data, void *user_data)
@@ -374,13 +377,27 @@ bool example_on_vsync_event(esp_lcd_panel_handle_t panel, const esp_lcd_rgb_pane
   BaseType_t high_task_awoken = pdFALSE;
   return high_task_awoken == pdTRUE;
 }
-void LCD_Init() {
-  ST7701_Reset();
-  ST7701_Init();
-  Touch_Init();
-  Backlight_Init();
-}
+void LCD_Init()
+{
+  delay(1000);
 
+  TCA9554PWR_Init(0xFA);  // alle EXIO Pins als Output
+  delay(100);
+
+  Set_EXIO(EXIO_PIN1, High); // Reset idle high
+  Set_EXIO(EXIO_PIN3, High); // CS idle high
+  delay(100);
+
+  ST7701_Reset();
+  delay(300);
+
+  ST7701_Init();
+  delay(500);
+
+  Backlight_Init();
+
+  delay(100);
+}
 void LCD_addWindow(uint16_t Xstart, uint16_t Ystart, uint16_t Xend, uint16_t Yend,uint8_t* color) {
   Xend = Xend + 1;      // esp_lcd_panel_draw_bitmap: x_end End index on x-axis (x_end not included)
   Yend = Yend + 1;      // esp_lcd_panel_draw_bitmap: y_end End index on y-axis (y_end not included)
@@ -394,23 +411,13 @@ void LCD_addWindow(uint16_t Xstart, uint16_t Ystart, uint16_t Xend, uint16_t Yen
 
 
 // backlight
-uint8_t LCD_Backlight = 50;
 void Backlight_Init()
 {
     pinMode(LCD_Backlight_PIN, OUTPUT);
     digitalWrite(LCD_Backlight_PIN, HIGH);
 }
 
-void Set_Backlight(uint8_t Light)                        //
+void Set_Backlight(uint8_t Light)
 {
-  if(Light > Backlight_MAX || Light < 0)
-    printf("Set Backlight parameters in the range of 0 to 100 \r\n");
-  else{
-    uint32_t Backlight = Light*10;
-    if(Backlight == 1000)
-      Backlight = 1024;
-    ledcWrite(LCD_Backlight_PIN, Backlight);
-  }
+    digitalWrite(LCD_Backlight_PIN, HIGH);
 }
-
-
