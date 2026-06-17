@@ -4,6 +4,8 @@
 #include "drillvision.h"
 #include "i2c_scanner.h"
 #include "qmi8658_driver.h"
+#include "sensor.h"
+#include "calibration.h"
 
 void setup()
 {
@@ -16,11 +18,32 @@ void setup()
     i2c_scan();
     qmi8658_init();
 
+    calibration_init();
+
     DrillVision.begin();
 }
 
 void loop()
 {
     DrillVision.update();
+
+    if (Serial.available())
+    {
+        char c = Serial.read();
+
+        
+       if (c == 'z' || c == 'Z')
+{
+    calibration_set_zero(
+        sensor_get_x(),
+        sensor_get_y()
+    );
+
+    sensor_reset_filter();
+
+    Serial.println("NULLPUNKT GESETZT");
+}
+    }
+
     delay(100);
 }

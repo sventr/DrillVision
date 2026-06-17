@@ -34,3 +34,10 @@ float calibration_get_y_offset()
 {
     return g_yOffset;
 }
+void calibration_set_zero(float currentX, float currentY)
+{
+    calibration_set_offset(
+        currentX + calibration_get_x_offset(),
+        currentY + calibration_get_y_offset()
+    );
+}

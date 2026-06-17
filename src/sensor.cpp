@@ -6,6 +6,7 @@
 #include "angle_math.h"
 #include "config.h"
 #include "qmi8658_driver.h"
+#include "calibration.h"
 
 static float xAngle = 0.0f;
 static float yAngle = 0.0f;
@@ -75,6 +76,11 @@ void sensor_init()
 
 #endif
 }
+void sensor_reset_filter()
+{
+    xAngle = 0.0f;
+    yAngle = 0.0f;
+}
 
 void sensor_update()
 {
@@ -90,10 +96,13 @@ void sensor_update()
 
     AngleResult angle = calculate_angles(ax, ay, az);
 
-   const float alpha = 0.15f;
+    float calibratedX = calibration_apply_x(angle.x);
+    float calibratedY = calibration_apply_y(angle.y);
 
-xAngle = xAngle + alpha * (angle.x - xAngle);
-yAngle = yAngle + alpha * (angle.y - yAngle);
+    const float alpha = 0.15f;
+
+    xAngle = xAngle + alpha * (calibratedX - xAngle);
+    yAngle = yAngle + alpha * (calibratedY - yAngle);
 
     static uint32_t lastPrint = 0;
 
@@ -102,9 +111,11 @@ yAngle = yAngle + alpha * (angle.y - yAngle);
         lastPrint = millis();
 
         Serial.printf(
-            "ROLL: %.2f  PITCH: %.2f\n",
+            "ROLL: %.2f  PITCH: %.2f  OFF_X: %.2f  OFF_Y: %.2f\n",
             xAngle,
-            yAngle
+            yAngle,
+            calibration_get_x_offset(),
+            calibration_get_y_offset()
         );
     }
 
@@ -120,8 +131,11 @@ yAngle = yAngle + alpha * (angle.y - yAngle);
 
     AngleResult angle = calculate_angles(ax, ay, az);
 
-    xAngle = angle.x;
-    yAngle = angle.y;
+    float calibratedX = calibration_apply_x(angle.x);
+    float calibratedY = calibration_apply_y(angle.y);
+
+    xAngle = calibratedX;
+    yAngle = calibratedY;
 
 #endif
 }
