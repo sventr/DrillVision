@@ -1,33 +1,32 @@
 #include <Arduino.h>
+#include <lvgl.h>
+
 #include "display_manager.h"
 #include "Display_ST7701.h"
-#include "esp_heap_caps.h"
-
-static uint16_t* fullFrame = nullptr;
+#include "LVGL_Driver.h"
+#include "screen_main.h"
 
 void display_init()
 {
     Serial.println("Display Manager gestartet");
 
     LCD_Init();
+    Lvgl_Init();
 
-    fullFrame = (uint16_t*)heap_caps_malloc(
-        480 * 480 * sizeof(uint16_t),
-        MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT
-    );
+    screen_main_create();
 
-    Serial.printf("fullFrame ptr: %p\n", fullFrame);
-
-    for (int i = 0; i < 480 * 480; i++)
-    {
-        fullFrame[i] = 0xF800;
-    }
-
-    LCD_addWindow(0, 0, 479, 479, (uint8_t*)fullFrame);
-
-    Serial.println("Display ROT Test fertig");
+    Serial.println("DrillVision Main UI gestartet");
 }
 
 void display_update(float xAngle, float yAngle, SystemState state)
 {
+    static uint32_t lastUi = 0;
+
+    if (millis() - lastUi >= 50)
+    {
+        lastUi = millis();
+        screen_main_update();
+    }
+
+    lv_timer_handler();
 }
