@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="260" viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+  <title>DrillVision Logo Master</title>
+  <desc>Vector master logo for DrillVision: crosshair, stylized spiral drill, wordmark.</desc>
+  <rect width="900" height="260" fill="none"/>
+
+  <!-- Icon -->
+  <g id="icon" transform="translate(112,130)">
+    <circle cx="0" cy="0" r="66" fill="none" stroke="#FFFFFF" stroke-width="9"/>
+    <circle cx="0" cy="0" r="28" fill="none" stroke="#FFFFFF" stroke-width="5"/>
+    <line x1="-86" y1="0" x2="-42" y2="0" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+    <line x1="42" y1="0" x2="86" y2="0" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+    <line x1="0" y1="-86" x2="0" y2="-42" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+    <line x1="0" y1="42" x2="0" y2="86" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+
+    <!-- Stylized spiral drill, laser-friendly closed shapes -->
+    <g id="drill" transform="rotate(-18)">
+      <path d="M -12 -72 L 12 -72 L 12 58 L 0 78 L -12 58 Z" fill="#FFFFFF"/>
+      <path d="M -12 -55 C 12 -48 14 -36 -10 -26 L -10 -8 C 14 -17 15 -3 -10 9 L -10 27 C 14 17 14 34 -8 43 L -8 58 L 0 72 L 8 58 L 8 -55 Z" fill="#000000"/>
+      <path d="M -9 -58 C 8 -53 9 -43 -9 -35" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+      <path d="M -9 -24 C 10 -18 10 -5 -9 3" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+      <path d="M -9 11 C 10 17 10 31 -7 39" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Wordmark -->
+  <g id="wordmark">
+    <text x="220" y="122" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="900" letter-spacing="1">
+      <tspan fill="#FFFFFF">DRILL</tspan><tspan fill="#FFFFFF">VISION</tspan>
+    </text>
+    <line x1="222" y1="154" x2="315" y2="154" stroke="#FFFFFF" stroke-width="5"/>
+    <line x1="650" y1="154" x2="745" y2="154" stroke="#FFFFFF" stroke-width="5"/>
+    <text x="335" y="162" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="600" letter-spacing="5" fill="#FFFFFF">
+      PRECISION DRILL ASSISTANT
+    </text>
+  </g>
+</svg>

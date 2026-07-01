@@ -4,8 +4,8 @@
 #include "display_manager.h"
 #include "Display_ST7701.h"
 #include "LVGL_Driver.h"
-#include "screen_main.h"
 #include "screen_boot.h"
+#include "screen_main.h"
 
 void display_init()
 {
@@ -16,16 +16,24 @@ void display_init()
 
     screen_boot_create();
 
-    screen_boot_update(20, "Display OK");
-    delay(400);
+    for (int i = 0; i < 100; i++)
+    {
+        lv_timer_handler();
+        delay(20);
+    }
 
-    screen_boot_update(45, "Sensor bereit");
-    delay(400);
+    screen_boot_show_test();
 
-    screen_boot_update(70, "Kalibrierung bereit");
-    delay(400);
+    screen_boot_update(25, "Display");
+    delay(300);
 
-    screen_boot_update(100, "System bereit");
+    screen_boot_update(50, "Sensor");
+    delay(300);
+
+    screen_boot_update(75, "Memory");
+    delay(300);
+
+    screen_boot_update(100, "System");
     delay(600);
 
     screen_main_create();
