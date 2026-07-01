@@ -30,8 +30,8 @@ static lv_obj_t* tickMarks[8];
 
 static constexpr float DEGREES_PER_DIV = 0.1f;
 static constexpr float PIXELS_PER_DIV = 30.0f;
-static float smoothBubbleX = 240.0f;
-static float smoothBubbleY = 250.0f;
+static float smoothBubbleX = 233.0f;
+static float smoothBubbleY = 243.0f;
 
 static lv_point_t horizontalPoints[] = {
     {115, 250},
@@ -125,8 +125,8 @@ static void create_tick_marks(lv_obj_t* screen)
 static void calibrate_button_event_cb(lv_event_t* e)
 {
    sensor_calibrate_zero();
-   smoothBubbleX = 240.0f;
-smoothBubbleY = 250.0f;
+smoothBubbleX = 233.0f;
+smoothBubbleY = 243.0f;
 
 if (targetDot)
 {
@@ -136,6 +136,7 @@ if (targetDot)
 
 void screen_main_create()
 {
+    lv_obj_clean(lv_scr_act());
     Serial.println("Main Screen LVGL erstellt");
 
     lv_obj_t* screen = lv_scr_act();
@@ -192,7 +193,7 @@ void screen_main_create()
     lv_obj_set_style_radius(targetDot, LV_RADIUS_CIRCLE, 0);
     lv_obj_set_style_border_width(targetDot, 0, 0);
     lv_obj_set_style_bg_color(targetDot, lv_color_hex(0x00FF66), 0);
-    lv_obj_set_pos(targetDot, 233, 243);
+ 
 
     labelX = lv_label_create(screen);
     lv_label_set_text(labelX, "X: 0.00°");
@@ -280,12 +281,12 @@ void screen_main_update()
 
     
 
-   if (targetDot)
+  if (targetDot)
 {
     float pixelsPerDegree = PIXELS_PER_DIV / DEGREES_PER_DIV;
 
-int xOffset = (int)(g_uiData.yAngle * pixelsPerDegree);
-int yOffset = (int)(g_uiData.xAngle * pixelsPerDegree);
+    int xOffset = (int)(g_uiData.yAngle * pixelsPerDegree);
+    int yOffset = (int)(g_uiData.xAngle * pixelsPerDegree);
 
     if (xOffset > 80) xOffset = 80;
     if (xOffset < -80) xOffset = -80;
@@ -293,22 +294,22 @@ int yOffset = (int)(g_uiData.xAngle * pixelsPerDegree);
     if (yOffset > 80) yOffset = 80;
     if (yOffset < -80) yOffset = -80;
 
-    float targetX = 240.0f + xOffset;
-    float targetY = 250.0f + yOffset;
-
-    static float smoothX = 240.0f;
-    static float smoothY = 250.0f;
+    float targetX = 233.0f + xOffset;
+    float targetY = 243.0f + yOffset;
 
     const float alpha = 0.14f;
 
-smoothBubbleX = smoothBubbleX + alpha * (targetX - smoothBubbleX);
-smoothBubbleY = smoothBubbleY + alpha * (targetY - smoothBubbleY);
+    smoothBubbleX =
+        smoothBubbleX + alpha * (targetX - smoothBubbleX);
 
-lv_obj_set_pos(
-    targetDot,
-    (int)smoothBubbleX - 7,
-    (int)smoothBubbleY - 7
-);
+    smoothBubbleY =
+        smoothBubbleY + alpha * (targetY - smoothBubbleY);
+
+    lv_obj_set_pos(
+        targetDot,
+        (int)smoothBubbleX,
+        (int)smoothBubbleY
+    );
 }
 if (labelCalibrationState)
 {

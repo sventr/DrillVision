@@ -100,13 +100,25 @@ void sensor_update()
     rawXAngle = angle.x;
 rawYAngle = angle.y;
 
-    float calibratedX = calibration_apply_x(angle.x);
-    float calibratedY = calibration_apply_y(angle.y);
+float calibratedX = calibration_apply_x(angle.x);
+float calibratedY = calibration_apply_y(angle.y);
 
-    const float alpha = 0.15f;
+const float deadzone = 0.30f;
 
-    xAngle = xAngle + alpha * (calibratedX - xAngle);
-    yAngle = yAngle + alpha * (calibratedY - yAngle);
+if (fabs(calibratedX) < deadzone)
+{
+    calibratedX = 0.0f;
+}
+
+if (fabs(calibratedY) < deadzone)
+{
+    calibratedY = 0.0f;
+}
+
+const float alpha = 0.15f;
+
+xAngle = xAngle + alpha * (calibratedX - xAngle);
+yAngle = yAngle + alpha * (calibratedY - yAngle);
 
     static uint32_t lastPrint = 0;
 
@@ -153,12 +165,36 @@ float sensor_get_y()
 {
     return yAngle;
 }
+
 void sensor_calibrate_zero()
 {
-    calibration_set_offset(rawXAngle, rawYAngle);
+    float sumX = 0.0f;
+    float sumY = 0.0f;
+    const int samples = 30;
+
+    for (int i = 0; i < samples; i++)
+    {
+        int16_t rawAx = read_i16(QMI8658_AX_L + 0);
+        int16_t rawAy = read_i16(QMI8658_AX_L + 2);
+        int16_t rawAz = read_i16(QMI8658_AX_L + 4);
+
+        float ax = rawAx / 4096.0f;
+        float ay = rawAy / 4096.0f;
+        float az = rawAz / 4096.0f;
+
+        AngleResult angle = calculate_angles(ax, ay, az);
+
+        sumX += angle.x;
+        sumY += angle.y;
+
+        delay(10);
+    }
+
+    float zeroX = sumX / samples;
+    float zeroY = sumY / samples;
+
+    calibration_set_offset(zeroX, zeroY);
 
     xAngle = 0.0f;
     yAngle = 0.0f;
-
-    sensor_reset_filter();
 }
