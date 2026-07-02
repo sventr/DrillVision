@@ -195,6 +195,15 @@ void sensor_calibrate_zero()
 
     calibration_set_offset(zeroX, zeroY);
 
+    rawXAngle = zeroX;
+    rawYAngle = zeroY;
+
     xAngle = 0.0f;
     yAngle = 0.0f;
+
+    Serial.printf(
+        "ZERO X: %.2f  ZERO Y: %.2f\n",
+        zeroX,
+        zeroY
+    );
 }

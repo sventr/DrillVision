@@ -32,12 +32,8 @@ void DrillVisionApp::update()
 {
     sensor_update();
 
-    float rawX = sensor_get_x();
-    float rawY = sensor_get_y();
-
-    float x = calibration_apply_x(rawX);
-    float y = calibration_apply_y(rawY);
-
+    float x = sensor_get_x();
+float y = sensor_get_y();
     SystemState state = system_state_from_angles(x, y);
 
     g_uiData.xAngle = x;

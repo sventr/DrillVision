@@ -31,18 +31,14 @@ void loop()
     {
         char c = Serial.read();
 
-        
-       if (c == 'z' || c == 'Z')
-{
-    calibration_set_zero(
-        sensor_get_x(),
-        sensor_get_y()
-    );
+        if (c == 'z' || c == 'Z')
+        {
+            sensor_calibrate_zero();
 
-    sensor_reset_filter();
-
-    Serial.println("NULLPUNKT GESETZT");
-}
+            Serial.println("=================================");
+            Serial.println("     SENSOR KALIBRIERT");
+            Serial.println("=================================");
+        }
     }
 
     delay(100);
